@@ -1,0 +1,41 @@
+#include <iostream>
+#include <fstream>
+#include<cstdlib>
+using namespace std;
+
+long long string_to_bit(const string& str)//将储存在string中的16进制转换为10进制 
+{
+   
+    long long result=strtoll(str.c_str(), NULL, 16);
+    return result;
+}
+
+int main(){
+	long long cache[16]={0};
+	double miss=0,hit=0;
+	int index;
+	string filename="D:/trace.txt";
+	ifstream infile; 
+    infile.open(filename.data());  
+    string s;
+    cout<<"Address"<<"\t\t"<<"是否命中"<<endl;
+    while(getline(infile,s))
+    {
+    	long long val=string_to_bit(s);
+    	index=val%16;
+    	if(cache[index]==val){
+    		cout<<s<<"\t"<<"hit"<<endl;
+    		hit++;
+		}
+		else{
+			cache[index]=val;
+			cout<<s<<"\t"<<"miss"<<endl;
+			miss++;
+		}
+    }
+    infile.close();            
+	double rate=hit/(hit+miss)*100;
+	cout<<"命中率:"<< rate<<"%"<<endl;
+	system("pause");
+	return 0;
+}
